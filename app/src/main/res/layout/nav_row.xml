@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="48dp"
+    android:orientation="horizontal"
+    android:gravity="center_vertical"
+    android:background="@drawable/custom_bg"
+    android:clickable="true">
+
+    <ImageView
+        android:layout_marginLeft="@dimen/padding_left"
+        android:layout_marginRight="@dimen/padding_left"
+        android:id="@+id/ivNavItem"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/ic_item"/>
+
+    <TextView
+        android:id="@+id/tvNavItem"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/padding_left"
+        android:text="Item"
+        android:textColor="@color/primaryColor"
+        android:textStyle="bold"
+        android:textSize="@dimen/nav_text_size"/>
+
+</LinearLayout>

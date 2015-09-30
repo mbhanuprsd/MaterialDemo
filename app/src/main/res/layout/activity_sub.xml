@@ -1,0 +1,25 @@
+<com.xcubelabs.bhanuprasadm.materialdemo.cutomviews.MyLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:context="com.xcubelabs.bhanuprasadm.materialdemo.activity.SubActivity">
+
+    <include layout="@layout/app_bar"
+        android:id="@+id/app_bar"/>
+
+    <com.xcubelabs.bhanuprasadm.materialdemo.cutomviews.MyView
+        android:layout_gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:padding="@dimen/image_padding"
+        android:gravity="center"
+        android:elevation="5dp"
+        android:text="@string/hello_world"
+        android:background="@color/primaryColor"
+        android:textStyle="bold"
+        android:textSize="@dimen/nav_text_size"
+        android:textColor="@color/white"/>
+
+</com.xcubelabs.bhanuprasadm.materialdemo.cutomviews.MyLayout>

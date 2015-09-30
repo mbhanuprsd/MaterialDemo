@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.xcubelabs.bhanuprasadm.materialdemo.activity.MainActivity">
+
+    <item android:title="@string/settings"
+        android:id="@+id/menuItem1"
+        app:showAsAction="never"/>
+
+    <item android:title="@string/next"
+        android:id="@+id/navigate"
+        android:icon="@drawable/ic_next"
+        app:showAsAction="ifRoom"/>
+
+</menu>
