@@ -1,6 +1,7 @@
 package com.xcubelabs.bhanuprasadm.materialdemo.activity;
 
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -10,6 +11,9 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.style.ImageSpan;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -40,6 +44,14 @@ public class MainActivity extends AppCompatActivity {
         mPager = (ViewPager) findViewById(R.id.pager);
         mPager.setAdapter(new MyPagerAdapter(getSupportFragmentManager()));
         mTabs = (SlidingTabLayout) findViewById(R.id.tabs);
+        mTabs.setCustomTabView(R.layout.custom_tab_view, R.id.tabText);
+        mTabs.setDistributeEvenly(true);
+        mTabs.setCustomTabColorizer(new SlidingTabLayout.TabColorizer() {
+            @Override
+            public int getIndicatorColor(int position) {
+                return R.color.primaryColor;
+            }
+        });
         mTabs.setViewPager(mPager);
     }
 
@@ -68,16 +80,22 @@ public class MainActivity extends AppCompatActivity {
 
     class MyPagerAdapter extends FragmentPagerAdapter {
 
-        String[] tabs;
+        int[] tabImages = {R.drawable.ic_images, R.drawable.ic_videos, R.drawable.ic_files};
+        String[] tabTexts = getResources().getStringArray(R.array.tabs);
 
         public MyPagerAdapter(FragmentManager fm) {
             super(fm);
-            tabs = getResources().getStringArray(R.array.tabs);
+            tabTexts = getResources().getStringArray(R.array.tabs);
         }
 
         @Override
         public CharSequence getPageTitle(int position) {
-            return tabs[position];
+            Drawable drawable = getResources().getDrawable(tabImages[position]);
+            drawable.setBounds(0, 0, 48, 48);
+            ImageSpan imageSpan = new ImageSpan(drawable);
+            SpannableString spannableString = new SpannableString(" ");
+            spannableString.setSpan(imageSpan, 0, spannableString.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            return spannableString;
         }
 
         @Override
@@ -88,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public int getCount() {
-            return tabs.length;
+            return tabTexts.length;
         }
     }
 
