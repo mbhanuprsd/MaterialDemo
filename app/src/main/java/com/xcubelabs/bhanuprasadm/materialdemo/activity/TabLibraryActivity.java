@@ -82,7 +82,6 @@ public class TabLibraryActivity extends AppCompatActivity implements MaterialTab
     }
 
     private class ViewPagerAdapter extends FragmentStatePagerAdapter {
-
         private int[] icons = {R.drawable.ic_images, R.drawable.ic_videos, R.drawable.ic_files,
                 R.drawable.ic_images, R.drawable.ic_videos, R.drawable.ic_files,
                 R.drawable.ic_images, R.drawable.ic_videos, R.drawable.ic_files};
