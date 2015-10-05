@@ -31,12 +31,14 @@ public class MainActivity extends AppCompatActivity {
     private ViewPager mPager;
     private SlidingTabLayout mTabs;
 
+    @SuppressWarnings("deprecation")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.app_bar);
         setSupportActionBar(toolbar);
+        //noinspection ConstantConditions
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         NavigationDrawerFragment drawerFragment = (NavigationDrawerFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
         drawerFragment.setUp(R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), toolbar);
@@ -69,45 +71,13 @@ public class MainActivity extends AppCompatActivity {
                 break;
 
             case R.id.menuItem_tabLibrary:
-
+                startActivity(new Intent(MainActivity.this, TabLibraryActivity.class));
                 break;
 
             default:
                 break;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    class MyPagerAdapter extends FragmentPagerAdapter {
-
-        int[] tabImages = {R.drawable.ic_images, R.drawable.ic_videos, R.drawable.ic_files};
-        String[] tabTexts = getResources().getStringArray(R.array.tabs);
-
-        public MyPagerAdapter(FragmentManager fm) {
-            super(fm);
-            tabTexts = getResources().getStringArray(R.array.tabs);
-        }
-
-        @Override
-        public CharSequence getPageTitle(int position) {
-            Drawable drawable = getResources().getDrawable(tabImages[position]);
-            drawable.setBounds(0, 0, 48, 48);
-            ImageSpan imageSpan = new ImageSpan(drawable);
-            SpannableString spannableString = new SpannableString(" ");
-            spannableString.setSpan(imageSpan, 0, spannableString.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            return spannableString;
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            MyFragment myFragment = MyFragment.getInstance(position);
-            return myFragment;
-        }
-
-        @Override
-        public int getCount() {
-            return tabTexts.length;
-        }
     }
 
     public static class MyFragment extends Fragment {
@@ -132,6 +102,40 @@ public class MainActivity extends AppCompatActivity {
                 tvPosition.setText("Selected fragment position : " + bundle.getInt("position", 0));
             }
             return layout;
+        }
+    }
+
+    class MyPagerAdapter extends FragmentPagerAdapter {
+
+        int[] tabImages = {R.drawable.ic_images, R.drawable.ic_videos, R.drawable.ic_files};
+        String[] tabTexts = getResources().getStringArray(R.array.tabs);
+
+        public MyPagerAdapter(FragmentManager fm) {
+            super(fm);
+            tabTexts = getResources().getStringArray(R.array.tabs);
+        }
+
+        @SuppressWarnings("deprecation")
+        @Override
+        public CharSequence getPageTitle(int position) {
+            Drawable drawable = getResources().getDrawable(tabImages[position]);
+            if (drawable != null) {
+                drawable.setBounds(0, 0, 48, 48);
+            }
+            ImageSpan imageSpan = new ImageSpan(drawable);
+            SpannableString spannableString = new SpannableString(" ");
+            spannableString.setSpan(imageSpan, 0, spannableString.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            return spannableString;
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            return MyFragment.getInstance(position);
+        }
+
+        @Override
+        public int getCount() {
+            return tabTexts.length;
         }
     }
 }
