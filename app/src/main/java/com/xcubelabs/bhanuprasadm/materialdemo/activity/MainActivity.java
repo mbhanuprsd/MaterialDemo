@@ -3,33 +3,34 @@ package com.xcubelabs.bhanuprasadm.materialdemo.activity;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.SpannableString;
-import android.text.Spanned;
-import android.text.style.ImageSpan;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.xcubelabs.bhanuprasadm.materialdemo.R;
+import com.xcubelabs.bhanuprasadm.materialdemo.fragment.BoxOfficeFragment;
 import com.xcubelabs.bhanuprasadm.materialdemo.fragment.NavigationDrawerFragment;
-import com.xcubelabs.bhanuprasadm.materialdemo.tabs.SlidingTabLayout;
+import com.xcubelabs.bhanuprasadm.materialdemo.fragment.SearchFragment;
+import com.xcubelabs.bhanuprasadm.materialdemo.fragment.UpcomingFragment;
 
-public class MainActivity extends AppCompatActivity {
+import it.neokree.materialtabs.MaterialTab;
+import it.neokree.materialtabs.MaterialTabHost;
+import it.neokree.materialtabs.MaterialTabListener;
 
-    private ViewPager mPager;
-    private SlidingTabLayout mTabs;
+public class MainActivity extends AppCompatActivity implements MaterialTabListener {
+
+    public static final int MOVIES_SEARCH = 0;
+    public static final int MOVIES_UPCOMING = 1;
+    public static final int MOVIES_BOXOFFICE = 2;
+    private MaterialTabHost materialTabHost;
+    private ViewPager viewPager;
 
     @SuppressWarnings("deprecation")
     @Override
@@ -43,14 +44,25 @@ public class MainActivity extends AppCompatActivity {
         NavigationDrawerFragment drawerFragment = (NavigationDrawerFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
         drawerFragment.setUp(R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), toolbar);
 
-        mPager = (ViewPager) findViewById(R.id.pager);
-        mPager.setAdapter(new MyPagerAdapter(getSupportFragmentManager()));
-        mTabs = (SlidingTabLayout) findViewById(R.id.tabs);
-        mTabs.setCustomTabView(R.layout.custom_tab_view, R.id.tabText);
-        mTabs.setDistributeEvenly(true);
-        mTabs.setBackgroundColor(getResources().getColor(R.color.primary_light));
-        mTabs.setSelectedIndicatorColors(getResources().getColor(R.color.accentColor));
-        mTabs.setViewPager(mPager);
+        materialTabHost = (MaterialTabHost) findViewById(R.id.tabs);
+        viewPager = (ViewPager) findViewById(R.id.pager);
+
+        MyPagerAdapter adapter = new MyPagerAdapter(getSupportFragmentManager());
+        viewPager.setAdapter(adapter);
+        //noinspection deprecation
+        viewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
+            @Override
+            public void onPageSelected(int position) {
+                materialTabHost.setSelectedNavigationItem(position);
+            }
+        });
+
+        for (int i = 0; i < adapter.getCount(); i++) {
+            materialTabHost.addTab(
+                    materialTabHost.newTab()
+                            .setIcon(adapter.getIcon(i))
+                            .setTabListener(this));
+        }
     }
 
     @Override
@@ -74,68 +86,65 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(MainActivity.this, TabLibraryActivity.class));
                 break;
 
+            case R.id.menu_vector:
+                startActivity(new Intent(MainActivity.this, VectorTestActivity.class));
+                break;
+
             default:
                 break;
         }
         return super.onOptionsItemSelected(item);
     }
 
-    public static class MyFragment extends Fragment {
-
-        TextView tvPosition;
-
-        public static MyFragment getInstance(int position) {
-            MyFragment fragment = new MyFragment();
-            Bundle args = new Bundle();
-            args.putInt("position", position);
-            fragment.setArguments(args);
-            return fragment;
-        }
-
-        @Nullable
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-            View layout = inflater.inflate(R.layout.fragment_my, container, false);
-            tvPosition = (TextView) layout.findViewById(R.id.tvPosition);
-            Bundle bundle = getArguments();
-            if (bundle != null) {
-                tvPosition.setText("Selected fragment position : " + bundle.getInt("position", 0));
-            }
-            return layout;
-        }
+    @Override
+    public void onTabSelected(MaterialTab materialTab) {
+        viewPager.setCurrentItem(materialTab.getPosition());
     }
 
-    class MyPagerAdapter extends FragmentPagerAdapter {
+    @Override
+    public void onTabReselected(MaterialTab materialTab) {
+
+    }
+
+    @Override
+    public void onTabUnselected(MaterialTab materialTab) {
+
+    }
+
+    class MyPagerAdapter extends FragmentStatePagerAdapter {
 
         int[] tabImages = {R.drawable.ic_images, R.drawable.ic_videos, R.drawable.ic_files};
-        String[] tabTexts = getResources().getStringArray(R.array.tabs);
 
         public MyPagerAdapter(FragmentManager fm) {
             super(fm);
-            tabTexts = getResources().getStringArray(R.array.tabs);
         }
 
-        @SuppressWarnings("deprecation")
-        @Override
-        public CharSequence getPageTitle(int position) {
-            Drawable drawable = getResources().getDrawable(tabImages[position]);
-            if (drawable != null) {
-                drawable.setBounds(0, 0, 48, 48);
-            }
-            ImageSpan imageSpan = new ImageSpan(drawable);
-            SpannableString spannableString = new SpannableString(" ");
-            spannableString.setSpan(imageSpan, 0, spannableString.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            return spannableString;
+        public Drawable getIcon(int position) {
+            return getResources().getDrawable(tabImages[position]);
         }
 
         @Override
         public Fragment getItem(int position) {
-            return MyFragment.getInstance(position);
+            Fragment fragment = null;
+            switch (position) {
+                case MOVIES_SEARCH:
+                    fragment = SearchFragment.newInstance("", "");
+                    break;
+
+                case MOVIES_UPCOMING:
+                    fragment = UpcomingFragment.newInstance("", "");
+                    break;
+
+                case MOVIES_BOXOFFICE:
+                    fragment = BoxOfficeFragment.newInstance("", "");
+                    break;
+            }
+            return fragment;
         }
 
         @Override
         public int getCount() {
-            return tabTexts.length;
+            return tabImages.length;
         }
     }
 }

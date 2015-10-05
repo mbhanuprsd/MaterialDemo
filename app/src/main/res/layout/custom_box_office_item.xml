@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/iv_movie_image"
+        android:layout_width="54dp"
+        android:layout_height="80dp"
+        android:layout_margin="5dp"
+        android:src="@drawable/movies" />
+
+    <TextView
+        android:id="@+id/tv_movie_title"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_margin="5dp"
+        android:gravity="end"
+        android:text="Title"
+        android:textSize="12sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/tv_release_date"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/tv_movie_title"
+        android:layout_marginRight="5dp"
+        android:gravity="right"
+        android:text="Date"
+        android:textSize="12sp" />
+
+    <RatingBar
+        android:id="@+id/rb_movie_rating"
+        style="?android:ratingBarStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/tv_release_date"
+        android:layout_margin="5dp"
+        android:max="5"
+        android:numStars="0" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginTop="2dp"
+        android:background="@color/primaryColor" />
+
+</RelativeLayout>

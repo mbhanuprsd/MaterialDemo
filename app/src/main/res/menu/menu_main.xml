@@ -4,17 +4,25 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.xcubelabs.bhanuprasadm.materialdemo.activity.MainActivity">
 
-    <item android:title="@string/settings"
+    <item
         android:id="@+id/menuItem1"
+        android:title="@string/settings"
         app:showAsAction="never"/>
 
-    <item android:title="@string/tab_library"
+    <item
         android:id="@+id/menuItem_tabLibrary"
+        android:title="@string/tab_library"
         app:showAsAction="never"/>
 
-    <item android:title="@string/next"
+    <item
         android:id="@+id/navigate"
         android:icon="@drawable/ic_next"
+        android:title="@string/next"
         app:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/menu_vector"
+        android:showAsAction="never"
+        android:title="@string/title_activity_vector_test" />
 
 </menu>

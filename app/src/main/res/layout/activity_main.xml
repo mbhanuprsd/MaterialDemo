@@ -16,10 +16,14 @@
             android:id="@+id/app_bar"
             layout="@layout/app_bar" />
 
-        <com.xcubelabs.bhanuprasadm.materialdemo.tabs.SlidingTabLayout
+        <it.neokree.materialtabs.MaterialTabHost
             android:id="@+id/tabs"
             android:layout_width="match_parent"
-            android:layout_height="48dp" />
+            android:layout_height="48dp"
+            app:accentColor="@color/accentColor"
+            app:hasIcons="true"
+            app:iconColor="#FFFFFF"
+            app:primaryColor="@color/primaryColor" />
 
         <android.support.v4.view.ViewPager
             android:id="@+id/pager"

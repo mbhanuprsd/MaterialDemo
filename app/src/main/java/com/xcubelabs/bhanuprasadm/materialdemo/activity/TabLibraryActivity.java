@@ -12,6 +12,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.xcubelabs.bhanuprasadm.materialdemo.R;
+import com.xcubelabs.bhanuprasadm.materialdemo.fragment.MyFragment;
 
 import it.neokree.materialtabs.MaterialTab;
 import it.neokree.materialtabs.MaterialTabHost;
@@ -82,10 +83,9 @@ public class TabLibraryActivity extends AppCompatActivity implements MaterialTab
     }
 
     private class ViewPagerAdapter extends FragmentStatePagerAdapter {
-
-        private int[] icons = {R.drawable.ic_images, R.drawable.ic_videos, R.drawable.ic_files,
-                R.drawable.ic_images, R.drawable.ic_videos, R.drawable.ic_files,
-                R.drawable.ic_images, R.drawable.ic_videos, R.drawable.ic_files};
+        private int[] icons = {R.drawable.ic_images, R.drawable.vector_movies, R.drawable.ic_files,
+                R.drawable.ic_images, R.drawable.vector_movies, R.drawable.ic_files,
+                R.drawable.ic_images, R.drawable.vector_movies, R.drawable.ic_files};
 
         public ViewPagerAdapter(FragmentManager fm) {
             super(fm);
@@ -93,7 +93,7 @@ public class TabLibraryActivity extends AppCompatActivity implements MaterialTab
 
         @Override
         public Fragment getItem(int position) {
-            return MainActivity.MyFragment.getInstance(position);
+            return MyFragment.getInstance(position);
         }
 
         @Override
