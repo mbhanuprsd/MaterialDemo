@@ -8,6 +8,10 @@
         android:id="@+id/menuItem1"
         app:showAsAction="never"/>
 
+    <item android:title="@string/tab_library"
+        android:id="@+id/menuItem_tabLibrary"
+        app:showAsAction="never"/>
+
     <item android:title="@string/next"
         android:id="@+id/navigate"
         android:icon="@drawable/ic_next"

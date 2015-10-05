@@ -46,12 +46,8 @@ public class MainActivity extends AppCompatActivity {
         mTabs = (SlidingTabLayout) findViewById(R.id.tabs);
         mTabs.setCustomTabView(R.layout.custom_tab_view, R.id.tabText);
         mTabs.setDistributeEvenly(true);
-        mTabs.setCustomTabColorizer(new SlidingTabLayout.TabColorizer() {
-            @Override
-            public int getIndicatorColor(int position) {
-                return R.color.primaryColor;
-            }
-        });
+        mTabs.setBackgroundColor(getResources().getColor(R.color.primary_light));
+        mTabs.setSelectedIndicatorColors(getResources().getColor(R.color.accentColor));
         mTabs.setViewPager(mPager);
     }
 
@@ -70,6 +66,10 @@ public class MainActivity extends AppCompatActivity {
 
             case R.id.navigate:
                 startActivity(new Intent(MainActivity.this, SubActivity.class));
+                break;
+
+            case R.id.menuItem_tabLibrary:
+
                 break;
 
             default:
