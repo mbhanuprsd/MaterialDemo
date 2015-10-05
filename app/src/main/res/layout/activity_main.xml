@@ -19,7 +19,7 @@
         <com.xcubelabs.bhanuprasadm.materialdemo.tabs.SlidingTabLayout
             android:id="@+id/tabs"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="48dp" />
 
         <android.support.v4.view.ViewPager
             android:id="@+id/pager"
@@ -30,11 +30,11 @@
     </LinearLayout>
 
     <fragment
+        android:id="@+id/fragment_navigation_drawer"
         android:name="com.xcubelabs.bhanuprasadm.materialdemo.fragment.NavigationDrawerFragment"
         android:layout_width="@dimen/nav_drawer_width"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:id="@+id/fragment_navigation_drawer"
         app:layout="@layout/fragment_navigation_drawer"
         tools:layout="@layout/fragment_navigation_drawer" />
 </android.support.v4.widget.DrawerLayout>
