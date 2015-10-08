@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
 import com.xcubelabs.bhanuprasadm.materialdemo.R;
+import com.xcubelabs.bhanuprasadm.materialdemo.extras.Constants;
 import com.xcubelabs.bhanuprasadm.materialdemo.logging.L;
 import com.xcubelabs.bhanuprasadm.materialdemo.network.VolleySingleton;
 import com.xcubelabs.bhanuprasadm.materialdemo.pojo.Movie;
@@ -36,8 +37,7 @@ public class BoxOfficeAdapter extends RecyclerView.Adapter<BoxOfficeAdapter.BOVi
     @Override
     public BOViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = layoutInflater.inflate(R.layout.custom_box_office_item, parent, false);
-        BOViewHolder viewHolder = new BOViewHolder(view);
-        return viewHolder;
+        return new BOViewHolder(view);
     }
 
     @Override
@@ -46,11 +46,16 @@ public class BoxOfficeAdapter extends RecyclerView.Adapter<BoxOfficeAdapter.BOVi
         L.m(current.toString());
         holder.tvTitle.setText(current.getTitle());
         DateFormat dateFormat = new SimpleDateFormat("dd MMM yyyy");
-        holder.tvReleaseDate.setText(dateFormat.format(current.getReleaseDateTheater()));
-        holder.rbAudRating.setRating(current.getAudienceScore() / 20.0F);
+        holder.tvReleaseDate.setText((current.getReleaseDateTheater() != null) ? dateFormat.format(current.getReleaseDateTheater()) : Constants.NA);
+        if (current.getAudienceScore() == -1) {
+            holder.rbAudRating.setRating(0.0F);
+            holder.rbAudRating.setAlpha(0.5F);
+        } else {
+            holder.rbAudRating.setRating(current.getAudienceScore() / 20.0F);
+        }
         ImageLoader imageLoader = VolleySingleton.getInstance().getImageLoader();
         String imageUrl = current.getUrlThumbnail();
-        if (imageUrl != null) {
+        if (!imageUrl.equals(Constants.NA)) {
             imageLoader.get(current.getUrlThumbnail(), new ImageLoader.ImageListener() {
                 @Override
                 public void onResponse(ImageLoader.ImageContainer response, boolean isImmediate) {
