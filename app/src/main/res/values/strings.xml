@@ -21,4 +21,10 @@
     <string name="title_activity_tab_library">TabLibraryActivity</string>
     <string name="tab_library">TabLibrary</string>
     <string name="title_activity_vector_test">VectorTestActivity</string>
+    <string name="timeout_error">Sorry. Slow or no intenet connection.</string>
+    <string name="auth_error">Invalid credentials.</string>
+    <string name="server_error">No response from server.</string>
+    <string name="network_error">Network error.</string>
+    <string name="parse_error">Cannot parse the data.</string>
+    <string name="undefined_error">Dont know what\'s wrong.</string>
 </resources>

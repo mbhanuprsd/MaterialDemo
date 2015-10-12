@@ -8,10 +8,17 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.NetworkError;
+import com.android.volley.NoConnectionError;
+import com.android.volley.ParseError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
+import com.android.volley.ServerError;
+import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.JsonObjectRequest;
@@ -60,6 +67,7 @@ public class BoxOfficeFragment extends Fragment {
     private BoxOfficeAdapter boxOfficeAdapter;
     private DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
     private RecyclerView rvBoxOffice;
+    private TextView tvError;
 
     private String mParam1;
     private String mParam2;
@@ -96,12 +104,27 @@ public class BoxOfficeFragment extends Fragment {
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
+                        tvError.setVisibility(View.GONE);
                         movieList = parseJson(response);
                         boxOfficeAdapter.setList(movieList);
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                tvError.setVisibility(View.VISIBLE);
+                if (error instanceof TimeoutError || error instanceof NoConnectionError) {
+                    tvError.setText(getString(R.string.timeout_error));
+                } else if (error instanceof AuthFailureError) {
+                    tvError.setText(getString(R.string.auth_error));
+                } else if (error instanceof ServerError) {
+                    tvError.setText(getString(R.string.server_error));
+                } else if (error instanceof NetworkError) {
+                    tvError.setText(getString(R.string.network_error));
+                } else if (error instanceof ParseError) {
+                    tvError.setText(getString(R.string.parse_error));
+                } else {
+                    tvError.setText(getString(R.string.undefined_error));
+                }
                 L.m(error.toString());
             }
         });
@@ -176,6 +199,7 @@ public class BoxOfficeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View mRootView = inflater.inflate(R.layout.fragment_box_office, container, false);
+        tvError = (TextView) mRootView.findViewById(R.id.tvVolleyError);
         rvBoxOffice = (RecyclerView) mRootView.findViewById(R.id.rvBoxOffice);
         rvBoxOffice.setLayoutManager(new LinearLayoutManager(getActivity()));
         boxOfficeAdapter = new BoxOfficeAdapter(getActivity());
