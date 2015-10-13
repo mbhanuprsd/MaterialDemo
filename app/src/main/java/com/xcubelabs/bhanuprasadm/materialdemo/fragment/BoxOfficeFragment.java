@@ -26,6 +26,8 @@ import com.xcubelabs.bhanuprasadm.materialdemo.MyApplication;
 import com.xcubelabs.bhanuprasadm.materialdemo.R;
 import com.xcubelabs.bhanuprasadm.materialdemo.adapter.BoxOfficeAdapter;
 import com.xcubelabs.bhanuprasadm.materialdemo.extras.Constants;
+import com.xcubelabs.bhanuprasadm.materialdemo.extras.MovieSorter;
+import com.xcubelabs.bhanuprasadm.materialdemo.interfaces.SortListener;
 import com.xcubelabs.bhanuprasadm.materialdemo.logging.L;
 import com.xcubelabs.bhanuprasadm.materialdemo.network.VolleySingleton;
 import com.xcubelabs.bhanuprasadm.materialdemo.pojo.Movie;
@@ -57,7 +59,7 @@ import static com.xcubelabs.bhanuprasadm.materialdemo.extras.UrlEndPoints.URL_PA
 import static com.xcubelabs.bhanuprasadm.materialdemo.extras.UrlEndPoints.URL_PARAM_LIMIT;
 
 
-public class BoxOfficeFragment extends Fragment {
+public class BoxOfficeFragment extends Fragment implements SortListener{
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     private VolleySingleton volleySingleton;
@@ -68,6 +70,7 @@ public class BoxOfficeFragment extends Fragment {
     private DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
     private RecyclerView rvBoxOffice;
     private TextView tvError;
+    private MovieSorter movieSorter = new MovieSorter();
 
     private String mParam1;
     private String mParam2;
@@ -209,4 +212,21 @@ public class BoxOfficeFragment extends Fragment {
     }
 
 
+    @Override
+    public void onSortByName() {
+        movieSorter.sortListByName(movieList);
+        boxOfficeAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onSortByDate() {
+        movieSorter.sortListByDate(movieList);
+        boxOfficeAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onSortByRating() {
+        movieSorter.sortListByRating(movieList);
+        boxOfficeAdapter.notifyDataSetChanged();
+    }
 }

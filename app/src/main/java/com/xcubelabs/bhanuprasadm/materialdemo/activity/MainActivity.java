@@ -12,25 +12,38 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.oguzdev.circularfloatingactionmenu.library.FloatingActionButton;
+import com.oguzdev.circularfloatingactionmenu.library.FloatingActionMenu;
+import com.oguzdev.circularfloatingactionmenu.library.SubActionButton;
 import com.xcubelabs.bhanuprasadm.materialdemo.R;
 import com.xcubelabs.bhanuprasadm.materialdemo.fragment.BoxOfficeFragment;
 import com.xcubelabs.bhanuprasadm.materialdemo.fragment.NavigationDrawerFragment;
 import com.xcubelabs.bhanuprasadm.materialdemo.fragment.SearchFragment;
 import com.xcubelabs.bhanuprasadm.materialdemo.fragment.UpcomingFragment;
+import com.xcubelabs.bhanuprasadm.materialdemo.interfaces.SortListener;
+import com.xcubelabs.bhanuprasadm.materialdemo.logging.L;
 
 import it.neokree.materialtabs.MaterialTab;
 import it.neokree.materialtabs.MaterialTabHost;
 import it.neokree.materialtabs.MaterialTabListener;
 
-public class MainActivity extends AppCompatActivity implements MaterialTabListener {
+public class MainActivity extends AppCompatActivity implements MaterialTabListener, View.OnClickListener {
 
     public static final int MOVIES_SEARCH = 0;
     public static final int MOVIES_UPCOMING = 1;
     public static final int MOVIES_BOXOFFICE = 2;
+    public static final String TAG_NAME = "sort_name";
+    public static final String TAG_DATE = "sort_date";
+    public static final String TAG_RATING = "sort_rating";
+
+
     private MaterialTabHost materialTabHost;
     private ViewPager viewPager;
+    private MyPagerAdapter adapter;
 
     @SuppressWarnings("deprecation")
     @Override
@@ -47,7 +60,7 @@ public class MainActivity extends AppCompatActivity implements MaterialTabListen
         materialTabHost = (MaterialTabHost) findViewById(R.id.tabs);
         viewPager = (ViewPager) findViewById(R.id.pager);
 
-        MyPagerAdapter adapter = new MyPagerAdapter(getSupportFragmentManager());
+        adapter = new MyPagerAdapter(getSupportFragmentManager());
         viewPager.setAdapter(adapter);
         //noinspection deprecation
         viewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
@@ -63,6 +76,42 @@ public class MainActivity extends AppCompatActivity implements MaterialTabListen
                             .setIcon(adapter.getIcon(i))
                             .setTabListener(this));
         }
+
+        ImageView sortIcon = new ImageView(this);
+        sortIcon.setImageDrawable(getResources().getDrawable(R.drawable.ic_sort));
+        FloatingActionButton sortActionButton = new FloatingActionButton.Builder(this)
+                .setContentView(sortIcon)
+                .setBackgroundDrawable(R.drawable.floating_action_button_bg)
+                .build();
+
+        SubActionButton.Builder subActionBuilder = new SubActionButton.Builder(this)
+                .setBackgroundDrawable(getResources().getDrawable(R.drawable.sub_action_bg));
+
+        ImageView sortNameIcon = new ImageView(this);
+        sortNameIcon.setImageDrawable(getResources().getDrawable(R.drawable.ic_sort_name));
+        ImageView sortDateIcon = new ImageView(this);
+        sortDateIcon.setImageDrawable(getResources().getDrawable(R.drawable.ic_sort_date));
+        ImageView sortRatingIcon = new ImageView(this);
+        sortRatingIcon.setImageDrawable(getResources().getDrawable(R.drawable.ic_sort_rating));
+
+        SubActionButton sortNameButton = subActionBuilder.setContentView(sortNameIcon).build();
+        SubActionButton sortDateButton = subActionBuilder.setContentView(sortDateIcon).build();
+        SubActionButton sortRatingButton = subActionBuilder.setContentView(sortRatingIcon).build();
+
+        sortNameButton.setTag(TAG_NAME);
+        sortDateButton.setTag(TAG_DATE);
+        sortRatingButton.setTag(TAG_RATING);
+
+        sortNameButton.setOnClickListener(this);
+        sortDateButton.setOnClickListener(this);
+        sortRatingButton.setOnClickListener(this);
+
+        FloatingActionMenu floatingActionMenu = new FloatingActionMenu.Builder(this)
+                .addSubActionView(sortNameButton)
+                .addSubActionView(sortDateButton)
+                .addSubActionView(sortRatingButton)
+                .attachTo(sortActionButton)
+                .build();
     }
 
     @Override
@@ -109,6 +158,28 @@ public class MainActivity extends AppCompatActivity implements MaterialTabListen
     @Override
     public void onTabUnselected(MaterialTab materialTab) {
 
+    }
+
+    @Override
+    public void onClick(View v) {
+        if(v.getTag().equals(TAG_NAME)){
+            Fragment fragment = (Fragment) adapter.instantiateItem(viewPager, viewPager.getCurrentItem());
+            if(fragment instanceof SortListener){
+                ((SortListener)fragment).onSortByName();
+            }
+        }
+        if(v.getTag().equals(TAG_DATE)){
+            Fragment fragment = (Fragment) adapter.instantiateItem(viewPager, viewPager.getCurrentItem());
+            if(fragment instanceof SortListener){
+                ((SortListener)fragment).onSortByDate();
+            }
+        }
+        if(v.getTag().equals(TAG_RATING)){
+            Fragment fragment = (Fragment) adapter.instantiateItem(viewPager, viewPager.getCurrentItem());
+            if(fragment instanceof SortListener){
+                ((SortListener)fragment).onSortByRating();
+            }
+        }
     }
 
     class MyPagerAdapter extends FragmentStatePagerAdapter {
