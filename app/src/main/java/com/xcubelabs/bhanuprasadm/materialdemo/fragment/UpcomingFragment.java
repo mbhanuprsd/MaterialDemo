@@ -8,13 +8,15 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.xcubelabs.bhanuprasadm.materialdemo.R;
+import com.xcubelabs.bhanuprasadm.materialdemo.interfaces.SortListener;
+import com.xcubelabs.bhanuprasadm.materialdemo.logging.L;
 
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link UpcomingFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class UpcomingFragment extends Fragment {
+public class UpcomingFragment extends Fragment implements SortListener{
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -64,4 +66,18 @@ public class UpcomingFragment extends Fragment {
     }
 
 
+    @Override
+    public void onSortByName() {
+        L.t(getActivity(), "upcoming - sort by name");
+    }
+
+    @Override
+    public void onSortByDate() {
+
+    }
+
+    @Override
+    public void onSortByRating() {
+
+    }
 }

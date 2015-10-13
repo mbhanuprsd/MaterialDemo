@@ -13,7 +13,6 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
 import com.xcubelabs.bhanuprasadm.materialdemo.R;
 import com.xcubelabs.bhanuprasadm.materialdemo.extras.Constants;
-import com.xcubelabs.bhanuprasadm.materialdemo.logging.L;
 import com.xcubelabs.bhanuprasadm.materialdemo.network.VolleySingleton;
 import com.xcubelabs.bhanuprasadm.materialdemo.pojo.Movie;
 
@@ -43,7 +42,6 @@ public class BoxOfficeAdapter extends RecyclerView.Adapter<BoxOfficeAdapter.BOVi
     @Override
     public void onBindViewHolder(final BOViewHolder holder, int position) {
         Movie current = movieList.get(position);
-        L.m(current.toString());
         holder.tvTitle.setText(current.getTitle());
         DateFormat dateFormat = new SimpleDateFormat("dd MMM yyyy");
         holder.tvReleaseDate.setText((current.getReleaseDateTheater() != null) ? dateFormat.format(current.getReleaseDateTheater()) : Constants.NA);

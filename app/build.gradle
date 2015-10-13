@@ -25,4 +25,6 @@ dependencies {
     compile 'com.android.support:recyclerview-v7:23.0.1'
     compile 'it.neokree:MaterialTabs:0.11'
     compile 'com.mcxiaoke.volley:library:1.0.19'
+    compile 'com.oguzdev:CircularFloatingActionMenu:1.0.2'
+    compile 'me.tatarka.support:jobscheduler:0.1.1'
 }
