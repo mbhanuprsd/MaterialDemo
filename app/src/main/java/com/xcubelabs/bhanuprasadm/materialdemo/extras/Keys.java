@@ -17,6 +17,6 @@ public interface Keys {
         String KEY_CAST = "cast";
         String KEY_REVIEWS = "reviews";
         String KEY_SIMILAR = "similar";
-
+        String KEY_ALTERNATE = "alternate";
     }
 }

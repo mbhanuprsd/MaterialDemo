@@ -12,6 +12,7 @@ public class MyService extends JobService {
     @Override
     public boolean onStartJob(JobParameters jobParameters) {
         L.t(this, "job started");
+        L.m(jobParameters.toString());
         jobFinished(jobParameters, false);
         return false;
     }

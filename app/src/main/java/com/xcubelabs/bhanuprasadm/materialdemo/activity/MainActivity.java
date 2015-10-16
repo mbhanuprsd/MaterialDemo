@@ -21,6 +21,7 @@ import com.oguzdev.circularfloatingactionmenu.library.FloatingActionButton;
 import com.oguzdev.circularfloatingactionmenu.library.FloatingActionMenu;
 import com.oguzdev.circularfloatingactionmenu.library.SubActionButton;
 import com.xcubelabs.bhanuprasadm.materialdemo.R;
+import com.xcubelabs.bhanuprasadm.materialdemo.extras.Constants;
 import com.xcubelabs.bhanuprasadm.materialdemo.fragment.BoxOfficeFragment;
 import com.xcubelabs.bhanuprasadm.materialdemo.fragment.NavigationDrawerFragment;
 import com.xcubelabs.bhanuprasadm.materialdemo.fragment.SearchFragment;
@@ -34,7 +35,7 @@ import it.neokree.materialtabs.MaterialTabListener;
 import me.tatarka.support.job.JobInfo;
 import me.tatarka.support.job.JobScheduler;
 
-public class MainActivity extends AppCompatActivity implements MaterialTabListener, View.OnClickListener {
+public class MainActivity extends AppCompatActivity implements MaterialTabListener, View.OnClickListener, Constants {
 
     public static final int MOVIES_SEARCH = 0;
     public static final int MOVIES_UPCOMING = 1;
@@ -43,7 +44,6 @@ public class MainActivity extends AppCompatActivity implements MaterialTabListen
     public static final String TAG_DATE = "sort_date";
     public static final String TAG_RATING = "sort_rating";
     private static final int JOB_ID = 123;
-
 
     private MaterialTabHost materialTabHost;
     private ViewPager viewPager;
@@ -124,7 +124,7 @@ public class MainActivity extends AppCompatActivity implements MaterialTabListen
 
     private void constructJobInfo() {
         JobInfo.Builder builder = new JobInfo.Builder(JOB_ID, new ComponentName(this, MyService.class));
-        builder.setPeriodic(5000)
+        builder.setPeriodic(MINUTE)
                 .setRequiredNetworkType(JobInfo.NETWORK_TYPE_UNMETERED)
                 .setPersisted(true);
         mJobScheduler.schedule(builder.build());
@@ -178,29 +178,23 @@ public class MainActivity extends AppCompatActivity implements MaterialTabListen
 
     @Override
     public void onClick(View v) {
-        if(v.getTag().equals(TAG_NAME)){
-            Fragment fragment = (Fragment) adapter.instantiateItem(viewPager, viewPager.getCurrentItem());
-            if(fragment instanceof SortListener){
-                ((SortListener)fragment).onSortByName();
+        Fragment fragment = (Fragment) adapter.instantiateItem(viewPager, viewPager.getCurrentItem());
+        if (fragment instanceof SortListener) {
+            if (v.getTag().equals(TAG_NAME)) {
+                ((SortListener) fragment).onSortByName();
             }
-        }
-        if(v.getTag().equals(TAG_DATE)){
-            Fragment fragment = (Fragment) adapter.instantiateItem(viewPager, viewPager.getCurrentItem());
-            if(fragment instanceof SortListener){
-                ((SortListener)fragment).onSortByDate();
+            if (v.getTag().equals(TAG_DATE)) {
+                ((SortListener) fragment).onSortByDate();
             }
-        }
-        if(v.getTag().equals(TAG_RATING)){
-            Fragment fragment = (Fragment) adapter.instantiateItem(viewPager, viewPager.getCurrentItem());
-            if(fragment instanceof SortListener){
-                ((SortListener)fragment).onSortByRating();
+            if (v.getTag().equals(TAG_RATING)) {
+                ((SortListener) fragment).onSortByRating();
             }
         }
     }
 
     class MyPagerAdapter extends FragmentStatePagerAdapter {
 
-        int[] tabImages = {R.drawable.ic_images, R.drawable.ic_videos, R.drawable.ic_files};
+        int[] tabImages = {R.drawable.ic_sort_name, R.drawable.ic_sort_date, R.drawable.ic_sort_rating};
 
         public MyPagerAdapter(FragmentManager fm) {
             super(fm);

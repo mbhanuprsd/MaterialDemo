@@ -1,6 +1,7 @@
 package com.xcubelabs.bhanuprasadm.materialdemo.fragment;
 
 
+import android.app.Dialog;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -8,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
 import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
@@ -27,6 +29,8 @@ import com.xcubelabs.bhanuprasadm.materialdemo.R;
 import com.xcubelabs.bhanuprasadm.materialdemo.adapter.BoxOfficeAdapter;
 import com.xcubelabs.bhanuprasadm.materialdemo.extras.Constants;
 import com.xcubelabs.bhanuprasadm.materialdemo.extras.MovieSorter;
+import com.xcubelabs.bhanuprasadm.materialdemo.interfaces.ClickListener;
+import com.xcubelabs.bhanuprasadm.materialdemo.interfaces.RecyclerTouchListener;
 import com.xcubelabs.bhanuprasadm.materialdemo.interfaces.SortListener;
 import com.xcubelabs.bhanuprasadm.materialdemo.logging.L;
 import com.xcubelabs.bhanuprasadm.materialdemo.network.VolleySingleton;
@@ -42,8 +46,10 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
+import static com.xcubelabs.bhanuprasadm.materialdemo.extras.Keys.EndpointBoxOffice.KEY_ALTERNATE;
 import static com.xcubelabs.bhanuprasadm.materialdemo.extras.Keys.EndpointBoxOffice.KEY_AUDIENCE_SCORE;
 import static com.xcubelabs.bhanuprasadm.materialdemo.extras.Keys.EndpointBoxOffice.KEY_ID;
+import static com.xcubelabs.bhanuprasadm.materialdemo.extras.Keys.EndpointBoxOffice.KEY_LINKS;
 import static com.xcubelabs.bhanuprasadm.materialdemo.extras.Keys.EndpointBoxOffice.KEY_MOVIES;
 import static com.xcubelabs.bhanuprasadm.materialdemo.extras.Keys.EndpointBoxOffice.KEY_POSTERS;
 import static com.xcubelabs.bhanuprasadm.materialdemo.extras.Keys.EndpointBoxOffice.KEY_RATINGS;
@@ -164,6 +170,11 @@ public class BoxOfficeFragment extends Fragment implements SortListener{
                     if (postersObject.has(KEY_THUMBNAIL) && !postersObject.isNull(KEY_THUMBNAIL)) {
                         thumbUrl = postersObject.getString(KEY_THUMBNAIL);
                     }
+                    JSONObject linksObject = movie.getJSONObject(KEY_LINKS);
+                    String alternateUrl = Constants.NA;
+                    if (linksObject != null && linksObject.has(KEY_ALTERNATE) && !linksObject.isNull(KEY_ALTERNATE)) {
+                        alternateUrl = linksObject.getString(KEY_ALTERNATE);
+                    }
 
                     if (id != -1 && !title.equals(Constants.NA)) {
 
@@ -180,9 +191,8 @@ public class BoxOfficeFragment extends Fragment implements SortListener{
                         currentMovie.setAudienceScore(audienceScore);
                         currentMovie.setSynopsis(synopsis);
                         currentMovie.setUrlThumbnail(thumbUrl);
+                        currentMovie.setUrlSelf(alternateUrl);
                         arrayList.add(currentMovie);
-                        DateFormat formatter = new SimpleDateFormat("dd MMM yyyy");
-                        L.m(currentMovie.getTitle() + " : " + currentMovie.getAudienceScore() + " : " + formatter.format(currentMovie.getReleaseDateTheater()));
                     }
                 }
             }
@@ -210,6 +220,26 @@ public class BoxOfficeFragment extends Fragment implements SortListener{
         rvBoxOffice.setLayoutManager(new LinearLayoutManager(getActivity()));
         boxOfficeAdapter = new BoxOfficeAdapter(getActivity());
         rvBoxOffice.setAdapter(boxOfficeAdapter);
+        rvBoxOffice.addOnItemTouchListener(new RecyclerTouchListener(getActivity(), rvBoxOffice, new ClickListener() {
+            @Override
+            public void onClick(View v, int position) {
+                Movie clicked = movieList.get(position);
+                L.m(clicked.toString());
+                Dialog dialog = new Dialog(getActivity());
+                dialog.setCancelable(true);
+                dialog.setContentView(R.layout.dialog_webview);
+                dialog.setCanceledOnTouchOutside(true);
+                dialog.setTitle(clicked.getTitle());
+                WebView webView = (WebView) dialog.findViewById(R.id.wvMovie);
+                webView.loadUrl((clicked.getUrlSelf()));
+                dialog.show();
+            }
+
+            @Override
+            public void onLongClick(View v, int position) {
+
+            }
+        }));
 
         if (savedInstanceState != null) {
             movieList = savedInstanceState.getParcelableArrayList(MOVIE_LIST);
